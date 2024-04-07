@@ -68,7 +68,7 @@ class HomePageController extends ChangeNotifier {
         ? const String.fromEnvironment('API_KEY', defaultValue: '')
         : dotenv.env['API_KEY'] ?? '';
     if (apiKey.isEmpty) {
-      log('No \$API_KEY environment variable');
+      print('No \$API_KEY environment variable');
       exit(1);
     }
     // For text-only input, use the gemini-pro model
