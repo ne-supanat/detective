@@ -1,0 +1,26 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Flutter: flutter clean",
+      "group": "build",
+      "type": "flutter",
+      "command": "flutter",
+      "args": ["clean"]
+    },
+    {
+      "label": "Flutter: flutter pub get",
+      "group": "build",
+      "type": "flutter",
+      "command": "flutter",
+      "args": ["pub", "get"]
+    },
+    {
+      "label": "Build Flutter Web with API Key",
+      "group": "build",
+      "type": "shell",
+      "command": "sh",
+      "args": ["./build_web.sh"]
+    }
+  ]
+}
