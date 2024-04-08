@@ -15,4 +15,4 @@ jobs:
         with:
           # customArgs: --dart-define="API_KEY=${{ secrets.MY_SECRETS }}"
           baseHref: /detective/
-          workingDir: github_page
+          # workingDir: github_page
