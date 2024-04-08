@@ -1,18 +1,31 @@
-name: Gh-Pages
+name: Your github action
 
 on:
   push:
     branches: [ main ]
 
 jobs:
-  build:
+  publish:
     runs-on: ubuntu-latest
-
     steps:
-      - uses: actions/checkout@v2
-      - uses: subosito/flutter-action@v1
-      - uses: bluefireteam/flutter-gh-pages@v7
+      - name: Check out
+        uses: actions/checkout@v3
+
+      - name: Generate your content
+        run: flutter build web
+
+      - name: Publish current workdir (which contains generated content) to GitHub Pages
+        uses: rayluo/github-pages-overwriter@v1.3
+
         with:
-          # customArgs: --dart-define="API_KEY=${{ secrets.MY_SECRETS }}"
-          baseHref: /detective/
-          # workingDir: github_page
+
+          # Optional. Default value "." means the root directory of your project will be published.
+          # You can use whatever directory your project uses, for example "wwwroot".
+          # Such a directory does *not* have to already exist in your repo,
+          # it could be an output directory created dynamically by your static website builder.
+          source-directory: build/web
+
+          # Optional. Default value "gh-pages".
+          # It specifies the temporary branch which hosts the static website.
+          # Each build will OVERWRITE this branch.
+          target-branch: gh-pages
