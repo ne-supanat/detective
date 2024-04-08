@@ -21,8 +21,8 @@ jobs:
       # Get flutter packages
       - run: flutter pub get
       # Build :D 
-      - name: Generate your content
-        run: flutter build web
+      # - name: Generate your content
+      #   run: flutter build web
 
       - name: Publish current workdir (which contains generated content) to GitHub Pages
         uses: rayluo/github-pages-overwriter@v1.3
