@@ -24,27 +24,36 @@ class HomePageController extends ChangeNotifier {
   List<ChatModel> chatHistory = [
     // ChatModel(
     //     type: ChatType.clue,
-    //     clueModel: ClueModel(question: 'is the answer can swim', reply: 'yes')),
+    //     clueModel: ClueModel(question: 'how many legs you have', reply: 'Four.')),
     // ChatModel(
     //     type: ChatType.clue,
-    //     clueModel: ClueModel(question: 'is the answer can swim', reply: 'yes')),
+    //     clueModel: ClueModel(
+    //         question: 'how big you are',
+    //         reply: "I can grow up to 10 feet long and weigh over 600 pounds.")),
     // ChatModel(
     //     type: ChatType.clue,
-    //     clueModel: ClueModel(question: 'is the answer can swim', reply: 'yes')),
+    //     clueModel: ClueModel(
+    //         question: 'where are you living',
+    //         reply:
+    //             'I make my home in a variety of habitats, including forests, grasslands, and swamps.')),
     // ChatModel(
     //     type: ChatType.clue,
-    //     clueModel: ClueModel(question: 'is the answer can swim', reply: 'yes')),
-    // ChatModel(
-    //     type: ChatType.clue, clueModel: ClueModel(question: 'is the answer can swim', reply: 'no')),
-    // ChatModel(
-    //     type: ChatType.clue,
-    //     clueModel: ClueModel(question: 'is the answer can swim', reply: 'don"t know')),
+    //     clueModel: ClueModel(
+    //         question: 'are you carnivore',
+    //         reply:
+    //             'Yes, I am a carnivore. My sharp teeth and powerful jaws are perfectly for hunting and eating meat.')),
     // ChatModel(
     //     type: ChatType.clue,
-    //     clueModel: ClueModel(question: 'is the answer can swim', reply: 'no related')),
-    // ChatModel(type: ChatType.answer, answerModel: AnswerModel(isCorrect: false, text: 'tiger')),
-    // ChatModel(type: ChatType.answer, answerModel: AnswerModel(isCorrect: true, text: 'plapytus')),
-    // ChatModel(type: ChatType.system, message: 'Fail to generate.'),
+    //     clueModel: ClueModel(
+    //         question: 'can you fly', reply: 'No, I cannot fly. I am a land-bound animal.')),
+    // ChatModel(type: ChatType.answer, answerModel: AnswerModel(isCorrect: false, text: 'lion')),
+    // ChatModel(
+    //     type: ChatType.clue,
+    //     clueModel: ClueModel(
+    //         question: 'are you hunt as a pack',
+    //         reply:
+    //             'Typically, I am a solitary hunter and prefer to stalk and ambush prey alone. However, in some cases, I may collaborate with others during hunts, especially when targeting larger prey.')),
+    // ChatModel(type: ChatType.answer, answerModel: AnswerModel(isCorrect: true, text: 'tiger')),
   ];
 
   bool onIdentifyMode = false;

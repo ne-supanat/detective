@@ -56,25 +56,31 @@ class ChatItem extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Row(
-              children: [
-                const Expanded(child: Divider()),
-                const SizedBox(width: 8),
-                SelectableText.rich(
-                  TextSpan(text: 'The answer is ${answer.isCorrect ? '' : 'not '}', children: [
-                    TextSpan(
-                      text: answer.text,
-                      style: const TextStyle(fontWeight: FontWeight.bold),
+            LayoutBuilder(builder: (context, constraint) {
+              return Row(
+                children: [
+                  const Expanded(child: Divider()),
+                  const SizedBox(width: 8),
+                  Container(
+                    constraints: BoxConstraints(maxWidth: constraint.maxWidth * 0.8),
+                    child: SelectableText.rich(
+                      TextSpan(text: 'The answer is ${answer.isCorrect ? '' : 'not '}', children: [
+                        TextSpan(
+                          text: answer.text,
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                      ]),
+                      style: TextStyle(
+                        color: (answer.isCorrect ? Colors.green : Colors.red),
+                      ),
+                      textAlign: TextAlign.center,
                     ),
-                  ]),
-                  style: TextStyle(
-                    color: (answer.isCorrect ? Colors.green : Colors.red),
                   ),
-                ),
-                const SizedBox(width: 8),
-                const Expanded(child: Divider()),
-              ],
-            ),
+                  const SizedBox(width: 8),
+                  const Expanded(child: Divider()),
+                ],
+              );
+            }),
           ],
         ),
       ),
