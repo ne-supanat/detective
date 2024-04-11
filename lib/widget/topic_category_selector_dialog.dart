@@ -94,7 +94,7 @@ class _TopicCategorySelectorDialogState extends State<TopicCategorySelectorDialo
     return Form(
       key: formKey,
       child: AppTextField(
-          hintText: 'Harry Potter’s characters',
+          hintText: 'e.g. Harry Potter',
           controller: textEditingControllerInput,
           onChanged: _onChangeInput,
           validator: (value) {
