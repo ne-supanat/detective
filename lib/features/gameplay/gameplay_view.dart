@@ -2,21 +2,21 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'home_controller.dart';
-import 'widget/app_textfield.dart';
-import 'widget/chat_box.dart';
-import 'widget/note_board.dart';
-import 'widget/topic_category_selector.dart';
+import 'gameplay_bloc.dart';
+import '../../widget/app_textfield.dart';
+import '../../widget/chat_box.dart';
+import '../../widget/note_board.dart';
+import '../../widget/topic_category_selector.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class GameplayView extends StatefulWidget {
+  const GameplayView({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<GameplayView> createState() => _GameplayViewState();
 }
 
-class _HomePageState extends State<HomePage> {
-  final controller = HomePageController();
+class _GameplayViewState extends State<GameplayView> {
+  final controller = GameplayBloc();
 
   @override
   void initState() {
@@ -241,9 +241,9 @@ class _HomePageState extends State<HomePage> {
   }
 
   _blocBuilder(
-      {bool Function(HomePageState previous, HomePageState current)? buildWhen,
-      required Widget Function(BuildContext context, HomePageState state) builder}) {
-    return BlocBuilder<HomePageController, HomePageState>(
+      {bool Function(GameplayState previous, GameplayState current)? buildWhen,
+      required Widget Function(BuildContext context, GameplayState state) builder}) {
+    return BlocBuilder<GameplayBloc, GameplayState>(
       buildWhen: buildWhen,
       builder: builder,
     );

@@ -4,13 +4,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
 
-import 'constants/chat_type.dart';
-import 'helpers/topic_categories_helper.dart';
-import 'models/answer_model.dart';
-import 'models/chat_model.dart';
-import 'models/clue_model.dart';
+import '../../constants/chat_type.dart';
+import '../../helpers/topic_categories_helper.dart';
+import '../../models/answer_model.dart';
+import '../../models/chat_model.dart';
+import '../../models/clue_model.dart';
 
-class HomePageState {
+class GameplayState {
   final String selectedCategory;
   final List<ChatModel> chatHistory;
   final bool isOnIdentifyMode;
@@ -18,7 +18,7 @@ class HomePageState {
   final bool isSendingMessage;
   final bool isGameEnded;
 
-  HomePageState({
+  GameplayState({
     required this.selectedCategory,
     required this.chatHistory,
     required this.isOnIdentifyMode,
@@ -27,8 +27,8 @@ class HomePageState {
     required this.isGameEnded,
   });
 
-  factory HomePageState.i() {
-    return HomePageState(
+  factory GameplayState.i() {
+    return GameplayState(
       selectedCategory: '',
       chatHistory: [
         // ChatModel(
@@ -71,7 +71,7 @@ class HomePageState {
     );
   }
 
-  HomePageState copyWith({
+  GameplayState copyWith({
     String? selectedCategory,
     List<ChatModel>? chatHistory,
     bool? isOnIdentifyMode,
@@ -79,7 +79,7 @@ class HomePageState {
     bool? isSendingMessage,
     bool? isGameEnded,
   }) {
-    return HomePageState(
+    return GameplayState(
       selectedCategory: selectedCategory ?? this.selectedCategory,
       chatHistory: chatHistory ?? this.chatHistory,
       isOnIdentifyMode: isOnIdentifyMode ?? this.isOnIdentifyMode,
@@ -89,8 +89,8 @@ class HomePageState {
     );
   }
 
-  HomePageState addChat(ChatModel chat) {
-    return HomePageState(
+  GameplayState addChat(ChatModel chat) {
+    return GameplayState(
       selectedCategory: selectedCategory,
       chatHistory: [...chatHistory, chat],
       isOnIdentifyMode: isOnIdentifyMode,
@@ -101,8 +101,8 @@ class HomePageState {
   }
 }
 
-class HomePageController extends Cubit<HomePageState> {
-  HomePageController() : super(HomePageState.i());
+class GameplayBloc extends Cubit<GameplayState> {
+  GameplayBloc() : super(GameplayState.i());
 
   late GenerativeModel model;
   ChatSession? chat;
