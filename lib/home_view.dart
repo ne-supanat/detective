@@ -1,6 +1,6 @@
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'home_controller.dart';
 import 'widget/app_textfield.dart';
@@ -26,8 +26,12 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext c) {
-    return ChangeNotifierProvider(
-        create: (_) => controller,
+    return MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (context) => controller,
+          )
+        ],
         child: Scaffold(
           body: Row(
             children: [
@@ -54,19 +58,22 @@ class _HomePageState extends State<HomePage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Consumer<HomePageController>(builder: (c, model, _) {
-            return Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                if (controller.gameEnded)
-                  Flexible(
-                    child: _topicCategorySelector(),
-                  ),
-                if (controller.gameEnded) const SizedBox(width: 8),
-                controller.gameEnded ? _newTopicButton() : _giveupButton(),
-              ],
-            );
-          }),
+          _blocBuilder(
+            buildWhen: (previous, current) => previous.isGameEnded != current.isGameEnded,
+            builder: (context, state) {
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  if (state.isGameEnded)
+                    Flexible(
+                      child: _topicCategorySelector(),
+                    ),
+                  if (state.isGameEnded) const SizedBox(width: 8),
+                  state.isGameEnded ? _newTopicButton() : _giveupButton(),
+                ],
+              );
+            },
+          ),
           const SizedBox(height: 16),
           Expanded(
             child: DottedBorder(
@@ -83,12 +90,15 @@ class _HomePageState extends State<HomePage> {
                     height: double.infinity,
                   ),
                   _chatBox(),
-                  Consumer<HomePageController>(builder: (c, model, _) {
-                    return Visibility(
-                      visible: model.loading,
-                      child: const Center(child: CircularProgressIndicator()),
-                    );
-                  })
+                  _blocBuilder(
+                    buildWhen: (previous, current) => previous.isLoading != current.isLoading,
+                    builder: (context, state) {
+                      return Visibility(
+                        visible: state.isLoading,
+                        child: const Center(child: CircularProgressIndicator()),
+                      );
+                    },
+                  ),
                 ],
               ),
             ),
@@ -101,70 +111,79 @@ class _HomePageState extends State<HomePage> {
   }
 
   _chatBox() {
-    return Consumer<HomePageController>(builder: (c, model, _) {
-      return ChatsBox(
-        chatHistory: controller.chatHistory,
-      );
-    });
+    return _blocBuilder(
+      buildWhen: (previous, current) => previous.chatHistory != current.chatHistory,
+      builder: (context, state) {
+        return ChatsBox(
+          chatHistory: state.chatHistory,
+        );
+      },
+    );
   }
 
   _chatTextfield() {
-    return Consumer<HomePageController>(builder: (c, model, _) {
-      if (!model.gameEnded) {
-        return Column(
-          children: [
-            Text(
-              '- ${model.onIdentifyMode ? 'IDENTIFY' : 'INTERROGATE'} MODE -',
-              style: const TextStyle(color: Colors.indigo),
-            ),
-            const SizedBox(height: 4),
-            Row(
-              children: [
-                Switch(
-                  inactiveTrackColor: Colors.white,
-                  inactiveThumbColor: Colors.indigo,
-                  value: model.onIdentifyMode,
-                  onChanged: model.onChangeOnClueMode,
-                ),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: AppTextField(
-                    controller: controller.textEditingControllerInput,
-                    suffixText: model.onIdentifyMode == true ? "" : "?",
-                    onChanged: controller.onChangeInput,
-                    onEditingComplete: controller.onCompleteInput,
+    return _blocBuilder(
+      buildWhen: (previous, current) =>
+          previous.isGameEnded != current.isGameEnded ||
+          previous.isOnIdentifyMode != current.isOnIdentifyMode ||
+          previous.isSendingMessage != current.isSendingMessage,
+      builder: (context, state) {
+        if (!state.isGameEnded) {
+          return Column(
+            children: [
+              Text(
+                '- ${state.isOnIdentifyMode ? 'IDENTIFY' : 'INTERROGATE'} MODE -',
+                style: const TextStyle(color: Colors.indigo),
+              ),
+              const SizedBox(height: 4),
+              Row(
+                children: [
+                  Switch(
+                    inactiveTrackColor: Colors.white,
+                    inactiveThumbColor: Colors.indigo,
+                    value: state.isOnIdentifyMode,
+                    onChanged: controller.onChangeOnClueMode,
                   ),
-                ),
-                const SizedBox(width: 8),
-                Container(
-                  width: 40,
-                  alignment: Alignment.center,
-                  child: controller.sendingMessage
-                      ? const SizedBox(
-                          width: 25,
-                          height: 25,
-                          child: CircularProgressIndicator(strokeWidth: 2.5),
-                        )
-                      : IconButton(
-                          onPressed: controller.onCompleteInput,
-                          style: IconButton.styleFrom(
-                            backgroundColor: Colors.indigo.shade50,
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: AppTextField(
+                      controller: controller.textEditingControllerInput,
+                      suffixText: state.isOnIdentifyMode == true ? "" : "?",
+                      onChanged: controller.onChangeInput,
+                      onEditingComplete: controller.onCompleteInput,
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Container(
+                    width: 40,
+                    alignment: Alignment.center,
+                    child: state.isSendingMessage
+                        ? const SizedBox(
+                            width: 25,
+                            height: 25,
+                            child: CircularProgressIndicator(strokeWidth: 2.5),
+                          )
+                        : IconButton(
+                            onPressed: controller.onCompleteInput,
+                            style: IconButton.styleFrom(
+                              backgroundColor: Colors.indigo.shade50,
+                            ),
+                            icon: const Icon(
+                              Icons.send,
+                              color: Colors.indigo,
+                              size: 16,
+                            ),
                           ),
-                          icon: const Icon(
-                            Icons.send,
-                            color: Colors.indigo,
-                            size: 16,
-                          ),
-                        ),
-                ),
-              ],
-            ),
-          ],
-        );
-      } else {
-        return const SizedBox();
-      }
-    });
+                  ),
+                ],
+              ),
+            ],
+          );
+        } else {
+          return const SizedBox();
+        }
+      },
+    );
   }
 
   _newTopicButton() {
@@ -210,9 +229,23 @@ class _HomePageState extends State<HomePage> {
   }
 
   _topicCategorySelector() {
-    return TopicCategorySelector(
-      value: controller.selectedCategory,
-      onChanged: controller.onChangeTopicCategory,
+    return _blocBuilder(
+      buildWhen: (previous, current) => previous.selectedCategory != current.selectedCategory,
+      builder: (context, state) {
+        return TopicCategorySelector(
+          value: state.selectedCategory,
+          onChanged: controller.onChangeTopicCategory,
+        );
+      },
+    );
+  }
+
+  _blocBuilder(
+      {bool Function(HomePageState previous, HomePageState current)? buildWhen,
+      required Widget Function(BuildContext context, HomePageState state) builder}) {
+    return BlocBuilder<HomePageController, HomePageState>(
+      buildWhen: buildWhen,
+      builder: builder,
     );
   }
 }

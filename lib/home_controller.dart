@@ -1,8 +1,6 @@
-import 'dart:developer';
-import 'dart:io';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
 
@@ -12,54 +10,105 @@ import 'models/answer_model.dart';
 import 'models/chat_model.dart';
 import 'models/clue_model.dart';
 
-class HomePageController extends ChangeNotifier {
+class HomePageState {
+  final String selectedCategory;
+  final List<ChatModel> chatHistory;
+  final bool isOnIdentifyMode;
+  final bool isLoading;
+  final bool isSendingMessage;
+  final bool isGameEnded;
+
+  HomePageState({
+    required this.selectedCategory,
+    required this.chatHistory,
+    required this.isOnIdentifyMode,
+    required this.isLoading,
+    required this.isSendingMessage,
+    required this.isGameEnded,
+  });
+
+  factory HomePageState.i() {
+    return HomePageState(
+      selectedCategory: '',
+      chatHistory: [
+        // ChatModel(
+        //     type: ChatType.clue,
+        //     clueModel: ClueModel(question: 'how many legs you have', reply: 'Four.')),
+        // ChatModel(
+        //     type: ChatType.clue,
+        //     clueModel: ClueModel(
+        //         question: 'how big you are',
+        //         reply: "I can grow up to 10 feet long and weigh over 600 pounds.")),
+        // ChatModel(
+        //     type: ChatType.clue,
+        //     clueModel: ClueModel(
+        //         question: 'where are you living',
+        //         reply:
+        //             'I make my home in a variety of habitats, including forests, grasslands, and swamps.')),
+        // ChatModel(
+        //     type: ChatType.clue,
+        //     clueModel: ClueModel(
+        //         question: 'are you carnivore',
+        //         reply:
+        //             'Yes, I am a carnivore. My sharp teeth and powerful jaws are perfectly for hunting and eating meat.')),
+        // ChatModel(
+        //     type: ChatType.clue,
+        //     clueModel: ClueModel(
+        //         question: 'can you fly', reply: 'No, I cannot fly. I am a land-bound animal.')),
+        // ChatModel(type: ChatType.answer, answerModel: AnswerModel(isCorrect: false, text: 'lion')),
+        // ChatModel(
+        //     type: ChatType.clue,
+        //     clueModel: ClueModel(
+        //         question: 'are you hunt as a pack',
+        //         reply:
+        //             'Typically, I am a solitary hunter and prefer to stalk and ambush prey alone. However, in some cases, I may collaborate with others during hunts, especially when targeting larger prey.')),
+        // ChatModel(type: ChatType.answer, answerModel: AnswerModel(isCorrect: true, text: 'tiger')),
+      ],
+      isOnIdentifyMode: false,
+      isLoading: false,
+      isSendingMessage: false,
+      isGameEnded: true,
+    );
+  }
+
+  HomePageState copyWith({
+    String? selectedCategory,
+    List<ChatModel>? chatHistory,
+    bool? isOnIdentifyMode,
+    bool? isLoading,
+    bool? isSendingMessage,
+    bool? isGameEnded,
+  }) {
+    return HomePageState(
+      selectedCategory: selectedCategory ?? this.selectedCategory,
+      chatHistory: chatHistory ?? this.chatHistory,
+      isOnIdentifyMode: isOnIdentifyMode ?? this.isOnIdentifyMode,
+      isLoading: isLoading ?? this.isLoading,
+      isSendingMessage: isSendingMessage ?? this.isSendingMessage,
+      isGameEnded: isGameEnded ?? this.isGameEnded,
+    );
+  }
+
+  HomePageState addChat(ChatModel chat) {
+    return HomePageState(
+      selectedCategory: selectedCategory,
+      chatHistory: [...chatHistory, chat],
+      isOnIdentifyMode: isOnIdentifyMode,
+      isLoading: isLoading,
+      isSendingMessage: isSendingMessage,
+      isGameEnded: isGameEnded,
+    );
+  }
+}
+
+class HomePageController extends Cubit<HomePageState> {
+  HomePageController() : super(HomePageState.i());
+
   late GenerativeModel model;
   ChatSession? chat;
 
-  String selectedCategory = '';
-
   String? topic;
   String input = '';
-
-  List<ChatModel> chatHistory = [
-    // ChatModel(
-    //     type: ChatType.clue,
-    //     clueModel: ClueModel(question: 'how many legs you have', reply: 'Four.')),
-    // ChatModel(
-    //     type: ChatType.clue,
-    //     clueModel: ClueModel(
-    //         question: 'how big you are',
-    //         reply: "I can grow up to 10 feet long and weigh over 600 pounds.")),
-    // ChatModel(
-    //     type: ChatType.clue,
-    //     clueModel: ClueModel(
-    //         question: 'where are you living',
-    //         reply:
-    //             'I make my home in a variety of habitats, including forests, grasslands, and swamps.')),
-    // ChatModel(
-    //     type: ChatType.clue,
-    //     clueModel: ClueModel(
-    //         question: 'are you carnivore',
-    //         reply:
-    //             'Yes, I am a carnivore. My sharp teeth and powerful jaws are perfectly for hunting and eating meat.')),
-    // ChatModel(
-    //     type: ChatType.clue,
-    //     clueModel: ClueModel(
-    //         question: 'can you fly', reply: 'No, I cannot fly. I am a land-bound animal.')),
-    // ChatModel(type: ChatType.answer, answerModel: AnswerModel(isCorrect: false, text: 'lion')),
-    // ChatModel(
-    //     type: ChatType.clue,
-    //     clueModel: ClueModel(
-    //         question: 'are you hunt as a pack',
-    //         reply:
-    //             'Typically, I am a solitary hunter and prefer to stalk and ambush prey alone. However, in some cases, I may collaborate with others during hunts, especially when targeting larger prey.')),
-    // ChatModel(type: ChatType.answer, answerModel: AnswerModel(isCorrect: true, text: 'tiger')),
-  ];
-
-  bool onIdentifyMode = false;
-  bool loading = false;
-  bool sendingMessage = false;
-  bool gameEnded = true;
 
   TextEditingController textEditingControllerInput = TextEditingController();
 
@@ -71,7 +120,7 @@ class HomePageController extends ChangeNotifier {
   ];
 
   init() {
-    selectedCategory = TopicCategoriesHelper.topicCategories.first;
+    emit(state.copyWith(selectedCategory: TopicCategoriesHelper.topicCategories.first));
 
     final String apiKey = kReleaseMode
         ? const String.fromEnvironment('API_KEY', defaultValue: '')
@@ -90,8 +139,7 @@ class HomePageController extends ChangeNotifier {
 
   newTopic() async {
     try {
-      loading = true;
-      notifyListeners();
+      emit(state.copyWith(isLoading: true));
 
       await createNewTopic();
       await setupChat();
@@ -102,22 +150,21 @@ class HomePageController extends ChangeNotifier {
 
       clearUI();
 
-      gameEnded = false;
+      emit(state.copyWith(isGameEnded: false));
     } catch (e) {
-      chatHistory.add(
+      emit(state.addChat(
         ChatModel(
           type: ChatType.system,
           message: 'Failed to setup',
         ),
-      );
+      ));
     } finally {
-      loading = false;
-      notifyListeners();
+      emit(state.copyWith(isLoading: false));
     }
   }
 
   createNewTopic() async {
-    final content = [Content.text('Random me one name from $selectedCategory}')];
+    final content = [Content.text('Random me one name from ${state.selectedCategory}}')];
     final response = await model.generateContent(content);
     topic = response.text;
   }
@@ -146,38 +193,40 @@ Sounds like a fun game! I'm ready for your questions. Remember, I can't reveal m
   }
 
   clearUI() {
-    chatHistory = [];
-    onIdentifyMode = false;
+    emit(state.copyWith(
+      chatHistory: [],
+      isOnIdentifyMode: false,
+    ));
 
     textEditingControllerInput.clear();
     input = '';
-
-    notifyListeners();
   }
 
   onChangeTopicCategory(String? value) {
     if (value != null) {
-      selectedCategory = value;
-      notifyListeners();
+      emit(state.copyWith(
+        selectedCategory: value,
+      ));
     }
   }
 
   onGiveup() async {
-    chatHistory.add(
-      ChatModel(
-        type: ChatType.system,
-        message: 'Answer is ${topic ?? ''}',
-      ),
-    );
-
-    gameEnded = true;
-
-    notifyListeners();
+    emit(state.copyWith(
+      chatHistory: state.chatHistory
+        ..add(
+          ChatModel(
+            type: ChatType.system,
+            message: 'Answer is ${topic ?? ''}',
+          ),
+        ),
+      isGameEnded: true,
+    ));
   }
 
   onChangeOnClueMode(bool value) {
-    onIdentifyMode = value;
-    notifyListeners();
+    emit(state.copyWith(
+      isOnIdentifyMode: value,
+    ));
   }
 
   onChangeInput(String? str) {
@@ -190,35 +239,37 @@ Sounds like a fun game! I'm ready for your questions. Remember, I can't reveal m
     textEditingControllerInput.clear();
     input = '';
 
-    sendingMessage = true;
-    notifyListeners();
+    emit(state.copyWith(
+      isSendingMessage: true,
+    ));
 
     if (message.isNotEmpty) {
-      if (onIdentifyMode) {
+      if (state.isOnIdentifyMode) {
         await onIdentifySend(message);
       } else {
         await onInterrogateSend(message);
       }
     }
 
-    sendingMessage = false;
-    notifyListeners();
+    emit(state.copyWith(
+      isSendingMessage: false,
+    ));
   }
 
   Future<void> onIdentifySend(String message) async {
     final isCorrect = message.toLowerCase().trim() == topic?.toLowerCase().trim();
-    chatHistory.add(
+    emit(state.addChat(
       ChatModel(
         type: ChatType.answer,
         answerModel: AnswerModel(isCorrect: isCorrect, text: message),
       ),
-    );
+    ));
 
     if (isCorrect) {
-      gameEnded = true;
+      emit(state.copyWith(
+        isGameEnded: true,
+      ));
     }
-
-    notifyListeners();
   }
 
   onInterrogateSend(String message) async {
@@ -236,13 +287,11 @@ Sounds like a fun game! I'm ready for your questions. Remember, I can't reveal m
   }
 
   handleClueResult(String message, String responseText) {
-    chatHistory.add(
+    emit(state.addChat(
       ChatModel(
         type: ChatType.clue,
         clueModel: ClueModel(question: message, reply: responseText),
       ),
-    );
-
-    notifyListeners();
+    ));
   }
 }
