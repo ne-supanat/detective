@@ -23,10 +23,17 @@
       "args": ["./build_web.sh"]
     },
     {
-      "label": "Flutter: flutter build asset",
+      "label": "Flutter: flutter build assets",
       "group": "build",
       "type": "flutter",
       "command": "fluttergen"
+    },
+    {
+      "label": "Flutter: flutter build runner",
+      "group": "build",
+      "type": "flutter",
+      "command": "flutter",
+      "args": ["pub", "run", "build_runner", "build"]
     }
   ]
 }

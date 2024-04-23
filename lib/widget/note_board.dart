@@ -104,4 +104,8 @@ class _NoteBoardState extends State<NoteBoard> {
       noteIds.clear();
     });
   }
+
+  test() {
+    print('asd');
+  }
 }

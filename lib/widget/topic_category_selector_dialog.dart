@@ -62,22 +62,24 @@ class _TopicCategorySelectorDialogState extends State<TopicCategorySelectorDialo
               ),
             ),
             const SizedBox(height: 8),
-            Container(
-              constraints: BoxConstraints(
-                maxHeight: MediaQuery.of(context).size.height * 0.75,
-                maxWidth: MediaQuery.of(context).size.width * 0.25,
-              ),
-              child: CustomScrollView(
-                shrinkWrap: true,
-                slivers: [
-                  SliverToBoxAdapter(
-                      child: _buildDivider(S.of(context).topic_category_selector_custom)),
-                  _buildItemList(customeItems, removable: true),
-                  const SliverToBoxAdapter(child: SizedBox(height: 8)),
-                  SliverToBoxAdapter(
-                      child: _buildDivider(S.of(context).topic_category_selector_default)),
-                  _buildItemList(defaultItems),
-                ],
+            Expanded(
+              child: Container(
+                constraints: BoxConstraints(
+                  maxHeight: MediaQuery.of(context).size.height * 0.75,
+                  maxWidth: MediaQuery.of(context).size.width * 0.25,
+                ),
+                child: CustomScrollView(
+                  shrinkWrap: true,
+                  slivers: [
+                    SliverToBoxAdapter(
+                        child: _buildDivider(S.of(context).topic_category_selector_custom)),
+                    _buildItemList(customeItems, removable: true),
+                    const SliverToBoxAdapter(child: SizedBox(height: 8)),
+                    SliverToBoxAdapter(
+                        child: _buildDivider(S.of(context).topic_category_selector_default)),
+                    _buildItemList(defaultItems),
+                  ],
+                ),
               ),
             ),
             const SizedBox(height: 8),
@@ -122,6 +124,7 @@ class _TopicCategorySelectorDialogState extends State<TopicCategorySelectorDialo
             style: const TextStyle(
               fontSize: 12,
               color: Colors.blueGrey,
+              overflow: TextOverflow.ellipsis,
             ),
           ),
           const SizedBox(width: 8),
@@ -149,11 +152,15 @@ class _TopicCategorySelectorDialogState extends State<TopicCategorySelectorDialo
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 SizedBox(width: removable ? 32 : 0),
-                Text(
-                  value,
-                  style: TextStyle(
-                    color: isSelected ? Colors.white : Colors.indigo,
-                    fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                Expanded(
+                  child: Text(
+                    value,
+                    style: TextStyle(
+                      color: isSelected ? Colors.white : Colors.indigo,
+                      fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    textAlign: TextAlign.center,
                   ),
                 ),
                 removable
