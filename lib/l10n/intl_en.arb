@@ -1,0 +1,32 @@
+{
+    "title": "AIdentity",
+    "mode": "- {mode, select, true{IDENTIFY} false{INTERROGATE}} MODE -",
+    "@mode": {
+        "placeholders": {
+            "mode": {
+                "type": "bool"
+            }
+        }
+    },
+    "new_game": "New Game",
+    "give_up": "Give up",
+    "notebook": "- NOTEBOOK -",
+    "chat_question": "Q: {question} ?",
+    "chat_answer": "A: {answer}",
+    "result": "The answer is {isCorrect, select, true{} false{not }}",
+    "@result": {
+        "placeholders": {
+            "isCorrect": {
+                "type": "bool"
+            }
+        }
+    },
+    "note_title": "Note",
+    "note_hint": "Note here...",
+    "topic_category_selector_custom": "Custom",
+    "topic_category_selector_default": "Default",
+    "topic_category_selector_close": "close",
+    "topic_category_selector_custom_hint": "e.g. Harry Potter",
+    "topic_category_selector_custom_add": "Add",
+    "topic_category_selector_custom_error": "Duplicated category"
+}

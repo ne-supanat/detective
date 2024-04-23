@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 
 import '../constants/note_colors.dart';
+import '../generated/l10n.dart';
 
 class NoteItem extends StatefulWidget {
   const NoteItem({super.key, required this.id, this.onMove, this.onRemove});
@@ -86,7 +87,7 @@ class _NoteItemState extends State<NoteItem> {
                         child: _buildNoteTextField(
                           maxLines: 1,
                           fontWeight: FontWeight.bold,
-                          initialValue: 'Note',
+                          initialValue: S.of(context).note_title,
                         ),
                       ),
                       const SizedBox(width: 4),
@@ -125,7 +126,7 @@ class _NoteItemState extends State<NoteItem> {
                   child: _buildNoteTextField(
                     minLines: 5,
                     maxLines: 99,
-                    hintText: 'Note here...',
+                    hintText: S.of(context).note_hint,
                   ),
                 )
               ],

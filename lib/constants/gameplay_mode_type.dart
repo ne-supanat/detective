@@ -1,0 +1,1 @@
+enum GameplayModeType { identify, interrogate }

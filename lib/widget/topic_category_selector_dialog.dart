@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
+import '../generated/l10n.dart';
 import '../helpers/sharedpref.dart';
 import '../helpers/topic_categories_helper.dart';
 import 'app_textfield.dart';
@@ -55,7 +56,7 @@ class _TopicCategorySelectorDialogState extends State<TopicCategorySelectorDialo
                   const SizedBox(width: 8),
                   FilledButton(
                     onPressed: _onAddNewCategory,
-                    child: const Text('Add'),
+                    child: Text(S.of(context).topic_category_selector_custom_add),
                   ),
                 ],
               ),
@@ -69,10 +70,12 @@ class _TopicCategorySelectorDialogState extends State<TopicCategorySelectorDialo
               child: CustomScrollView(
                 shrinkWrap: true,
                 slivers: [
-                  SliverToBoxAdapter(child: _buildDivider('Custom')),
+                  SliverToBoxAdapter(
+                      child: _buildDivider(S.of(context).topic_category_selector_custom)),
                   _buildItemList(customeItems, removable: true),
                   const SliverToBoxAdapter(child: SizedBox(height: 8)),
-                  SliverToBoxAdapter(child: _buildDivider('Default')),
+                  SliverToBoxAdapter(
+                      child: _buildDivider(S.of(context).topic_category_selector_default)),
                   _buildItemList(defaultItems),
                 ],
               ),
@@ -82,7 +85,7 @@ class _TopicCategorySelectorDialogState extends State<TopicCategorySelectorDialo
               onPressed: () {
                 Navigator.pop(context);
               },
-              child: const Text('close'),
+              child: Text(S.of(context).topic_category_selector_close),
             )
           ],
         ),
@@ -94,12 +97,12 @@ class _TopicCategorySelectorDialogState extends State<TopicCategorySelectorDialo
     return Form(
       key: formKey,
       child: AppTextField(
-          hintText: 'e.g. Harry Potter',
+          hintText: S.of(context).topic_category_selector_custom_hint,
           controller: textEditingControllerInput,
           onChanged: _onChangeInput,
           validator: (value) {
             if (customeItems.contains(input) || defaultItems.contains(input)) {
-              return 'Duplicated category';
+              return S.of(context).topic_category_selector_custom_error;
             } else {
               return null;
             }

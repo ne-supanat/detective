@@ -21,6 +21,12 @@
       "type": "shell",
       "command": "sh",
       "args": ["./build_web.sh"]
+    },
+    {
+      "label": "Flutter: flutter build asset",
+      "group": "build",
+      "type": "flutter",
+      "command": "fluttergen"
     }
   ]
 }

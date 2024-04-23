@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../constants/chat_type.dart';
+import '../generated/l10n.dart';
 import '../models/chat_model.dart';
 
 class ChatItem extends StatelessWidget {
@@ -31,11 +32,11 @@ class ChatItem extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SelectableText(
-              'Q: ${clue.question} ?',
+              S.current.chat_question(clue.question),
               style: const TextStyle(color: Colors.black87),
             ),
             SelectableText(
-              'A: ${clue.reply}',
+              S.current.chat_answer(clue.reply),
               style: const TextStyle(color: Colors.black87),
             ),
           ],
@@ -64,7 +65,7 @@ class ChatItem extends StatelessWidget {
                   Container(
                     constraints: BoxConstraints(maxWidth: constraint.maxWidth * 0.8),
                     child: SelectableText.rich(
-                      TextSpan(text: 'The answer is ${answer.isCorrect ? '' : 'not '}', children: [
+                      TextSpan(text: S.current.result(answer.isCorrect), children: [
                         TextSpan(
                           text: answer.text,
                           style: const TextStyle(fontWeight: FontWeight.bold),

@@ -2,6 +2,7 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../generated/l10n.dart';
 import 'gameplay_bloc.dart';
 import '../../widget/app_textfield.dart';
 import '../../widget/chat_box.dart';
@@ -132,7 +133,7 @@ class _GameplayViewState extends State<GameplayView> {
           return Column(
             children: [
               Text(
-                '- ${state.isOnIdentifyMode ? 'IDENTIFY' : 'INTERROGATE'} MODE -',
+                S.of(context).mode(state.isOnIdentifyMode),
                 style: const TextStyle(color: Colors.indigo),
               ),
               const SizedBox(height: 4),
@@ -193,7 +194,7 @@ class _GameplayViewState extends State<GameplayView> {
         onPressed: () async {
           await controller.newTopic();
         },
-        child: const Text('New Game'),
+        child: Text(S.of(context).new_game),
       ),
     );
   }
@@ -205,7 +206,7 @@ class _GameplayViewState extends State<GameplayView> {
         onPressed: () async {
           await controller.onGiveup();
         },
-        child: const Text('Give up'),
+        child: Text(S.of(context).give_up),
       ),
     );
   }
@@ -213,9 +214,9 @@ class _GameplayViewState extends State<GameplayView> {
   _clueSection() {
     return Column(
       children: [
-        const Text(
-          '- NOTEBOOK -',
-          style: TextStyle(fontWeight: FontWeight.bold),
+        Text(
+          S.of(context).notebook,
+          style: const TextStyle(fontWeight: FontWeight.bold),
         ),
         Expanded(
           child: _cluesBox(),
