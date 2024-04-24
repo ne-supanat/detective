@@ -36,7 +36,7 @@ class ChatItem extends StatelessWidget {
               style: const TextStyle(color: Colors.black87),
             ),
             SelectableText(
-              S.current.chat_answer(clue.reply),
+              S.current.chat_response(clue.response),
               style: const TextStyle(color: Colors.black87),
             ),
           ],

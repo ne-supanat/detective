@@ -1,3 +1,4 @@
+import 'package:detective/generated/l10n.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -203,7 +204,7 @@ Sounds like a fun game! I'm ready for your questions. Remember, I can't reveal m
   }
 
   onChangeTopicCategory(String? value) {
-    if (value != null) {
+    if (value?.isNotEmpty == true) {
       emit(state.copyWith(
         selectedCategory: value,
       ));
@@ -216,7 +217,7 @@ Sounds like a fun game! I'm ready for your questions. Remember, I can't reveal m
         ..add(
           ChatModel(
             type: ChatType.system,
-            message: 'Answer is ${topic ?? ''}',
+            message: S.current.chat_answer(topic ?? ''),
           ),
         ),
       isGameEnded: true,
@@ -277,11 +278,11 @@ Sounds like a fun game! I'm ready for your questions. Remember, I can't reveal m
     try {
       var response = await chat!.sendMessage(content);
 
-      final responseText = response.text ?? 'No reply.';
+      final responseText = response.text ?? S.current.chat_no_reply;
 
       handleClueResult(message, responseText);
     } catch (e) {
-      handleClueResult(message, 'Failed to reply, Please ask something else...');
+      handleClueResult(message, S.current.chat_failed_to_reply);
       setupChat();
     }
   }
@@ -290,7 +291,7 @@ Sounds like a fun game! I'm ready for your questions. Remember, I can't reveal m
     emit(state.addChat(
       ChatModel(
         type: ChatType.clue,
-        clueModel: ClueModel(question: message, reply: responseText),
+        clueModel: ClueModel(question: message, response: responseText),
       ),
     ));
   }

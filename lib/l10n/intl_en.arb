@@ -12,8 +12,11 @@
     "give_up": "Give up",
     "notebook": "- NOTEBOOK -",
     "chat_question": "Q: {question} ?",
-    "chat_answer": "A: {answer}",
+    "chat_response": "A: {response}",
     "result": "The answer is {isCorrect, select, true{} false{not }}",
+    "chat_answer": "Answer is {answer}",
+    "chat_no_reply": "No reply.",
+    "chat_failed_to_reply": "Failed to reply, Please ask something else...",
     "@result": {
         "placeholders": {
             "isCorrect": {

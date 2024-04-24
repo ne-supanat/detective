@@ -1,6 +1,6 @@
 class ClueModel {
   final String question;
-  final String reply;
+  final String response;
 
-  ClueModel({required this.question, required this.reply});
+  ClueModel({required this.question, required this.response});
 }

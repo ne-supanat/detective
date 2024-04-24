@@ -113,13 +113,13 @@ class S {
     );
   }
 
-  /// `A: {answer}`
-  String chat_answer(Object answer) {
+  /// `A: {response}`
+  String chat_response(Object response) {
     return Intl.message(
-      'A: $answer',
-      name: 'chat_answer',
+      'A: $response',
+      name: 'chat_response',
       desc: '',
-      args: [answer],
+      args: [response],
     );
   }
 
@@ -130,6 +130,36 @@ class S {
       name: 'result',
       desc: '',
       args: [isCorrect],
+    );
+  }
+
+  /// `Answer is {answer}`
+  String chat_answer(Object answer) {
+    return Intl.message(
+      'Answer is $answer',
+      name: 'chat_answer',
+      desc: '',
+      args: [answer],
+    );
+  }
+
+  /// `No reply.`
+  String get chat_no_reply {
+    return Intl.message(
+      'No reply.',
+      name: 'chat_no_reply',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Failed to reply, Please ask something else...`
+  String get chat_failed_to_reply {
+    return Intl.message(
+      'Failed to reply, Please ask something else...',
+      name: 'chat_failed_to_reply',
+      desc: '',
+      args: [],
     );
   }
 

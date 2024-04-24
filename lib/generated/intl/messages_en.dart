@@ -20,16 +20,18 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'en';
 
-  static String m0(answer) => "A: ${answer}";
+  static String m0(answer) => "Answer is ${answer}";
 
   static String m1(question) => "Q: ${question} ?";
 
-  static String m2(mode) => "- ${Intl.select(mode, {
+  static String m2(response) => "A: ${response}";
+
+  static String m3(mode) => "- ${Intl.select(mode, {
             'true': 'IDENTIFY',
             'false': 'INTERROGATE',
           })} MODE -";
 
-  static String m3(isCorrect) => "The answer is ${Intl.select(isCorrect, {
+  static String m4(isCorrect) => "The answer is ${Intl.select(isCorrect, {
             'true': '',
             'false': 'not ',
           })}";
@@ -37,14 +39,18 @@ class MessageLookup extends MessageLookupByLibrary {
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "chat_answer": m0,
+        "chat_failed_to_reply": MessageLookupByLibrary.simpleMessage(
+            "Failed to reply, Please ask something else..."),
+        "chat_no_reply": MessageLookupByLibrary.simpleMessage("No reply."),
         "chat_question": m1,
+        "chat_response": m2,
         "give_up": MessageLookupByLibrary.simpleMessage("Give up"),
-        "mode": m2,
+        "mode": m3,
         "new_game": MessageLookupByLibrary.simpleMessage("New Game"),
         "note_hint": MessageLookupByLibrary.simpleMessage("Note here..."),
         "note_title": MessageLookupByLibrary.simpleMessage("Note"),
         "notebook": MessageLookupByLibrary.simpleMessage("- NOTEBOOK -"),
-        "result": m3,
+        "result": m4,
         "title": MessageLookupByLibrary.simpleMessage("AIdentity"),
         "topic_category_selector_close":
             MessageLookupByLibrary.simpleMessage("close"),
