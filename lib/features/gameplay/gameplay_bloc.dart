@@ -31,40 +31,7 @@ class GameplayState {
   factory GameplayState.i() {
     return GameplayState(
       selectedCategory: '',
-      chatHistory: [
-        // ChatModel(
-        //     type: ChatType.clue,
-        //     clueModel: ClueModel(question: 'how many legs you have', reply: 'Four.')),
-        // ChatModel(
-        //     type: ChatType.clue,
-        //     clueModel: ClueModel(
-        //         question: 'how big you are',
-        //         reply: "I can grow up to 10 feet long and weigh over 600 pounds.")),
-        // ChatModel(
-        //     type: ChatType.clue,
-        //     clueModel: ClueModel(
-        //         question: 'where are you living',
-        //         reply:
-        //             'I make my home in a variety of habitats, including forests, grasslands, and swamps.')),
-        // ChatModel(
-        //     type: ChatType.clue,
-        //     clueModel: ClueModel(
-        //         question: 'are you carnivore',
-        //         reply:
-        //             'Yes, I am a carnivore. My sharp teeth and powerful jaws are perfectly for hunting and eating meat.')),
-        // ChatModel(
-        //     type: ChatType.clue,
-        //     clueModel: ClueModel(
-        //         question: 'can you fly', reply: 'No, I cannot fly. I am a land-bound animal.')),
-        // ChatModel(type: ChatType.answer, answerModel: AnswerModel(isCorrect: false, text: 'lion')),
-        // ChatModel(
-        //     type: ChatType.clue,
-        //     clueModel: ClueModel(
-        //         question: 'are you hunt as a pack',
-        //         reply:
-        //             'Typically, I am a solitary hunter and prefer to stalk and ambush prey alone. However, in some cases, I may collaborate with others during hunts, especially when targeting larger prey.')),
-        // ChatModel(type: ChatType.answer, answerModel: AnswerModel(isCorrect: true, text: 'tiger')),
-      ],
+      chatHistory: [],
       isOnIdentifyMode: false,
       isLoading: false,
       isSendingMessage: false,
@@ -129,7 +96,7 @@ class GameplayBloc extends Cubit<GameplayState> {
     if (apiKey.isEmpty) {
       throw ('No \$API_KEY environment variable');
     }
-    // For text-only input, use the gemini-pro model
+
     model = GenerativeModel(
       model: 'gemini-pro',
       apiKey: apiKey,
