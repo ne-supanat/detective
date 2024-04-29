@@ -96,7 +96,6 @@ class GameplayBloc extends Cubit<GameplayState> {
     if (apiKey.isEmpty) {
       throw ('No \$API_KEY environment variable');
     }
-
     model = GenerativeModel(
       model: 'gemini-pro',
       apiKey: apiKey,
@@ -179,16 +178,16 @@ Sounds like a fun game! I'm ready for your questions. Remember, I can't reveal m
   }
 
   onGiveup() async {
-    emit(state.copyWith(
-      chatHistory: state.chatHistory
-        ..add(
+    emit(state
+        .copyWith(
+          isGameEnded: true,
+        )
+        .addChat(
           ChatModel(
             type: ChatType.system,
             message: S.current.chat_answer(topic ?? ''),
           ),
-        ),
-      isGameEnded: true,
-    ));
+        ));
   }
 
   onChangeOnClueMode(bool value) {
