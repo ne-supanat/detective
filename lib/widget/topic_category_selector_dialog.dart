@@ -62,7 +62,7 @@ class _TopicCategorySelectorDialogState extends State<TopicCategorySelectorDialo
               ),
             ),
             const SizedBox(height: 8),
-            Expanded(
+            Flexible(
               child: Container(
                 constraints: BoxConstraints(
                   maxHeight: MediaQuery.of(context).size.height * 0.75,
@@ -103,7 +103,7 @@ class _TopicCategorySelectorDialogState extends State<TopicCategorySelectorDialo
           controller: textEditingControllerInput,
           onChanged: _onChangeInput,
           validator: (value) {
-            if (customeItems.contains(input) || defaultItems.contains(input)) {
+            if (_inputValidate(input)) {
               return S.of(context).topic_category_selector_custom_error;
             } else {
               return null;
@@ -228,5 +228,10 @@ class _TopicCategorySelectorDialogState extends State<TopicCategorySelectorDialo
         _onSelectItem(defaultItems.first);
       }
     });
+  }
+
+  _inputValidate(String? input) {
+    return customeItems.map((e) => e.toLowerCase()).contains(input?.toLowerCase()) ||
+        defaultItems.map((e) => e.toLowerCase()).contains(input?.toLowerCase());
   }
 }
