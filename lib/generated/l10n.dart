@@ -83,6 +83,19 @@ class S {
     );
   }
 
+  /// `{count, plural, =0{} =1{1 character} other{{count} characters}}`
+  String answer_hint(int count) {
+    return Intl.plural(
+      count,
+      zero: '',
+      one: '1 character',
+      other: '$count characters',
+      name: 'answer_hint',
+      desc: '',
+      args: [count],
+    );
+  }
+
   /// `Give up`
   String get give_up {
     return Intl.message(

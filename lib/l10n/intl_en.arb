@@ -9,6 +9,14 @@
         }
     },
     "new_game": "New Game",
+    "answer_hint": "{count, plural, =0{} =1{1 character} other{{count} characters}}",
+    "@answer_hint": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
     "give_up": "Give up",
     "notebook": "- NOTEBOOK -",
     "chat_question": "Q: {question} ?",

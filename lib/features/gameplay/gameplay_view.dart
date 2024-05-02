@@ -62,17 +62,7 @@ class _GameplayViewState extends State<GameplayView> {
           _blocBuilder(
             buildWhen: (previous, current) => previous.isGameEnded != current.isGameEnded,
             builder: (context, state) {
-              return Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  if (state.isGameEnded)
-                    Flexible(
-                      child: _topicCategorySelector(),
-                    ),
-                  if (state.isGameEnded) const SizedBox(width: 8),
-                  state.isGameEnded ? _newTopicButton() : _giveupButton(),
-                ],
-              );
+              return state.isGameEnded ? _pregameHeader() : _ingameHeader();
             },
           ),
           const SizedBox(height: 16),
@@ -196,6 +186,62 @@ class _GameplayViewState extends State<GameplayView> {
         },
         child: Text(S.of(context).new_game),
       ),
+    );
+  }
+
+  _pregameHeader() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Flexible(
+          child: _topicCategorySelector(),
+        ),
+        const SizedBox(width: 8),
+        _newTopicButton()
+      ],
+    );
+  }
+
+  _ingameHeader() {
+    final showHint = (controller.topic?.length ?? 0) > 0;
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.end,
+      children: [
+        if (showHint)
+          Flexible(
+            child: Column(
+              children: [
+                Text(S.of(context).answer_hint(controller.topic?.replaceAll(' ', '').length ?? 0)),
+                FittedBox(fit: BoxFit.scaleDown, child: _anwserHint()),
+              ],
+            ),
+          ),
+        if (showHint) const SizedBox(width: 8),
+        _giveupButton(),
+      ],
+    );
+  }
+
+  _anwserHint() {
+    return Row(
+      children: controller.topic?.split('').map((e) {
+            if (e == ' ') {
+              return const SizedBox(width: 20);
+            } else {
+              return Container(
+                width: 20,
+                height: 25,
+                margin: const EdgeInsets.symmetric(horizontal: 1),
+                decoration: BoxDecoration(
+                  color: Colors.blueGrey[50],
+                  border: Border.all(color: Colors.blueGrey.shade100),
+                  borderRadius: BorderRadius.circular(4),
+                ),
+              );
+            }
+          }).toList() ??
+          [],
     );
   }
 
